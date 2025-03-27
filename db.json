@@ -1,0 +1,29 @@
+{
+    "students": [
+      {
+        "id": 1,
+        "name": "Happiness",
+        "class": "Violin"
+      },
+      {
+        "id": 2,
+        "name": "James",
+        "class": "Piano"
+      },
+      {
+        "id": 3,
+        "name": "Sophia",
+        "class": "Guitar"
+      },
+      {
+        "id": 4,
+        "name": "Eliana",
+        "class": "Flute"
+      },
+      {
+        "id": 5,
+        "name": "Samuel",
+        "class": "Piano"
+      }
+    ]
+}
