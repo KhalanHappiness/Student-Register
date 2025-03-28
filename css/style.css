@@ -109,3 +109,22 @@ form .btn{
     cursor: pointer;
 
 }
+.btn.selected, .absent-btn.selected {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn.selected {
+    background-color: #4CAF50; /* Green for present */
+    color: white;
+}
+
+.absent-btn.selected {
+    background-color: #f44336; /* Red for absent */
+    color: white;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

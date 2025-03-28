@@ -147,13 +147,52 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
     //function to mark attendance(disable buttons after selection)
-    function markAttendance(studentId, status, presentBtn, absentbtn){
+    function markAttendance(student, status, presentBtn, absentbtn){
 
-        console.log(`Student ID: ${studentId}, Status: ${status}`)
+        // Prepare attendance data
+        const attendanceData = {
+            studentId: student.id,
+            studentName: student.name,
+            class: student.class,
+            status: status,
+            date: new Date().toISOString().split('T')[0] // Current date in YYYY-MM-DD format
+        }
 
-        //Disable both buttons after one is clicked
-        presentBtn.disabled =true;
-        absentbtn.disabled = true;
+        // Post attendance to the database
+        fetch('http://localhost:3000/attendance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(attendanceData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok')
+            }
+            return response.json()
+        })
+        .then(data => {
+            console.log('Attendance recorded successfully:', data)
+
+            //Disable both buttons after successful posting
+            presentBtn.disabled = true
+            absentbtn.disabled = true
+
+            // Add visual feedback
+            if (status === "Present") {
+                presentBtn.classList.add("selected")
+            } else {
+                absentbtn.classList.add("selected")
+            }
+        })
+        .catch(error => {
+            console.error('Error recording attendance:', error)
+            // Optionally show an error message to the user
+            alert('Failed to record attendance. Please try again.')
+        })
+        
+        
 
     }
 
