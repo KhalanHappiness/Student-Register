@@ -11,6 +11,18 @@ document.addEventListener("DOMContentLoaded", function(){
     const results = document.getElementById("results")
     let tableBody =document.querySelector("#studentTable tbody")
 
+
+    //create html elements
+    let row = document.createElement("tr")
+    let idCell = document.createElement("td")
+    let nameCell = document.createElement("td")
+    let classCell = document.createElement("td")
+
+
+    
+
+
+    //function to search for students
     function searchForStudent(){
 
         searchButton.addEventListener('click', function(e){
@@ -41,20 +53,17 @@ document.addEventListener("DOMContentLoaded", function(){
                 //loop through student data
                 students.forEach(student => {
 
-                    let row = document.createElement("tr")
+                    
 
-                    //create and append id cell
-                    let idCell = document.createElement("td")
+                    //append id cell
                     idCell.textContent = student.id
                     row.appendChild(idCell)
 
-                    //create and append name cell
-                    let nameCell = document.createElement("td")
+                    //append name cell
                     nameCell.textContent = student.name
                     row.appendChild(nameCell)
 
-                     //create and append class cell
-                     let classCell = document.createElement("td")
+                     //append class cell
                      classCell.textContent = student.class
                      row.appendChild(classCell)
  
@@ -77,6 +86,44 @@ document.addEventListener("DOMContentLoaded", function(){
 
         
     }
+
+    function displayStudents(){
+
+        //Clears the previous data
+        tableBody.innerHTML = ''
+
+        if(student.length === 0){
+            tableBody.innerHTML = `<tr><td colspan="3">No student found</td></tr>`
+            return
+        }
+
+        
+
+        students.forEach(student => {
+
+            //append id cell
+            idCell.textContent = student.id
+            row.appendChild(idCell)
+
+            //append namecell
+            nameCell.textContent = student.name
+            row.appendChild(nameCell)
+
+            //append class cell
+            classCell.textContent = student.class
+            row.appendChild(classCell)
+
+            tableBody.appendChild(row)
+
+
+
+
+
+        })
+    }
+
+
+
 
     searchForStudent()
 
