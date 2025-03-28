@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function(){
             //create the present button
             let presentButton = document.createElement("button");
             presentButton.textContent="present"
-            presentButton.classList.add("present-btn")
+            presentButton.classList.add("btn")
             presentButton.addEventListener("click", function(){
                 markAttendance(student.id, "Present", presentButton, absentButton)
             })
