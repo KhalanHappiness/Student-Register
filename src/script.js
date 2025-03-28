@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function(){
     
     const searchButton = document.getElementById("searchButton")
     const form = document.getElementById("register")
-    const total = document.getElementById("totals")
     const results = document.getElementById("results")
     let tableBody =document.querySelector("#studentTable tbody")
     
@@ -183,10 +182,13 @@ document.addEventListener("DOMContentLoaded", function(){
             } else {
                 absentbtn.classList.add("selected")
             }
+
+            // Update totals after successful attendance marking
+              updateStudentTotals()
         })
         .catch(error => {
             console.error('Error recording attendance:', error)
-            // Optionally show an error message to the user
+            //show an error message to the user
             alert('Failed to record attendance. Please try again.')
         })
         
@@ -261,11 +263,62 @@ document.addEventListener("DOMContentLoaded", function(){
         })
     }
 
+    function updateStudentTotals() {
+        // Fetch students and attendance data
+        Promise.all([
+            fetch('http://localhost:3000/students').then(response => response.json()),
+            fetch('http://localhost:3000/attendance').then(response => response.json())
+        ])
+        .then(([students, attendanceRecords]) => {
+            // Total number of students
+            const totalStudents = students.length
+    
+            // Get today's date
+            const today = new Date().toISOString().split('T')[0]
+    
+            // Filter attendance records for today
+            const todaysAttendance = attendanceRecords.filter(record => 
+                record.date === today
+            )
+    
+            // Count present and absent students
+            const presentStudents = todaysAttendance.filter(record => 
+                record.status === "Present"
+            ).length
+    
+            const absentStudents = todaysAttendance.filter(record => 
+                record.status === "Absent"
+            ).length
+    
+            // Display totals
+            const total = document.getElementById("totals")
+            if (total) {
+                total.innerHTML = `
+                    <p>Total Students: ${totalStudents}</p>
+                    <p>Present Students: ${presentStudents}</p>
+                    <p>Absent Students: ${absentStudents}</p>
+                `
+            }
+    
+            
+        })
+        .catch(error => {
+            console.error("Error fetching student or attendance data:", error)
+            
+            // Display error message
+            const totalsElement = document.getElementById("totals")
+            if (totalsElement) {
+                totalsElement.innerHTML = `<p>Unable to load student totals</p>`
+            }
+        })
+    }
+
 
 
     fetchAllStudents()
     searchForStudent()
     newStudentDetails()
+    updateStudentTotals()
 
 
 
