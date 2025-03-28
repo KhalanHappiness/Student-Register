@@ -29,6 +29,11 @@
       "id": 6,
       "name": "Alice Molly",
       "class": "Drums"
+    },
+    {
+      "id": 7,
+      "name": "Wisdom Blessed",
+      "class": "Piano"
     }
   ],
   "attendance": [
@@ -45,6 +50,16 @@
     {
       "id": "7330",
       "status": "Present",
+      "date": "2025-03-28"
+    },
+    {
+      "id": "5d9a",
+      "status": "Present",
+      "date": "2025-03-28"
+    },
+    {
+      "id": "eb80",
+      "status": "Absent",
       "date": "2025-03-28"
     }
   ]

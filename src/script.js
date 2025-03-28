@@ -130,6 +130,11 @@ document.addEventListener("DOMContentLoaded", function(){
         absentButton.addEventListener('click', function(){
             markAttendance(student.id, "Absent", presentButton, absentButton)
         })
+        
+
+
+
+
         statusCell.appendChild(absentButton)
        
         row.appendChild(statusCell)
