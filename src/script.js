@@ -10,11 +10,12 @@ document.addEventListener("DOMContentLoaded", function(){
     const total = document.getElementById("totals")
     const results = document.getElementById("results")
     let tableBody =document.querySelector("#studentTable tbody")
+    
 
 
 
     
-    
+    //function to fetch students from the db
 
     function fetchAllStudents(){
 
@@ -76,7 +77,10 @@ document.addEventListener("DOMContentLoaded", function(){
                      let classCell = document.createElement("td")
                      classCell.textContent = student.class
                      row.appendChild(classCell)
- 
+
+                     //create and append status cell
+                     let statusCell = document.createElement("td")
+                    statusCell.createElement("button")
 
                     //create and append row to the tbody
                     tableBody.appendChild(row)
@@ -129,6 +133,31 @@ document.addEventListener("DOMContentLoaded", function(){
             classCell.textContent = student.class
             row.appendChild(classCell)
 
+            //create and append the status cell
+
+            let statusCell = document.createElement("td")
+            //create the present button
+            let presentButton = document.createElement("button");
+            presentButton.textContent="present"
+            presentButton.classList.add("present-btn")
+            presentButton.addEventListener("click", function(){
+                markAttendance(student.id, "Present", presentButton, absentButton)
+            })
+            statusCell.appendChild(presentButton)
+
+           
+            //create the absent button
+            let absentButton = document.createElement("button");
+            absentButton.textContent = "Absent"
+            absentButton.classList.add("absent-btn")
+            absentButton.addEventListener('click', function(){
+                markAttendance(student.id, "Absent", presentButton, absentButton)
+            })
+            statusCell.appendChild(absentButton)
+           
+            row.appendChild(statusCell)
+
+
             tableBody.appendChild(row)
 
 
@@ -136,6 +165,17 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
         })
+    }
+
+    //function to mark attendance(disable buttons after selection)
+    function markAttendance(studentId, status, presentBtn, absentbtn){
+
+        console.log(`Student ID: ${studentId}, Status: ${status}`)
+
+        //Disable both buttons after one is clicked
+        presentBtn.disabled =true;
+        absentbtn.disabled = true;
+
     }
 
 
