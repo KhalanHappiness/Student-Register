@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", function(){
     
     const searchButton = document.getElementById("searchButton")
     const form = document.getElementById("register")
-    const name = document.getElementById("name")
-    const className = document.getElementById("className")
     const total = document.getElementById("totals")
     const results = document.getElementById("results")
     let tableBody =document.querySelector("#studentTable tbody")
@@ -196,10 +194,78 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
+    //function to post new student details 
+
+    function generateNextStudentId(existingStudents) {
+        // Find the maximum existing integer ID
+        const maxIntegerId = existingStudents
+            .filter(student => typeof student.id === 'number')
+            .reduce((max, student) => Math.max(max, student.id), 0);
+    
+        // Return the next sequential integer
+        return maxIntegerId + 1;
+    }
+    
+    // Usage in the newStudentDetails function would look like:
+    function newStudentDetails(){
+        form.addEventListener('submit', function(e){
+            e.preventDefault()
+    
+            const name = document.getElementById("name").value.trim()
+            const className = document.getElementById("className").value.trim()
+    
+            // Fetch existing students to get the next ID
+            fetch('http://localhost:3000/students')
+            .then(response => response.json())
+            .then(existingStudents => {
+                // Generate the next sequential ID
+                const newStudentId = generateNextStudentId(existingStudents)
+    
+                // Prepare student data object
+                const studentData = {
+                    id: newStudentId,
+                    name: name,
+                    class: className
+                }
+    
+                // Post the new student
+                return fetch('http://localhost:3000/students', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(studentData)
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok')
+                }
+                return response.json()
+            })
+            .then(data => {
+                // Clear the form
+                document.getElementById("name").value = ''
+                document.getElementById("className").value = ''
+    
+                // Optional: Refresh the student list or add the new student to the table
+                renderStudentRow(data)
+    
+                // Show success message
+                alert('Student added successfully!')
+            })
+            .catch(error => {
+                console.error('Error adding student:', error)
+                alert('Failed to add student. Please try again.')
+            })
+        })
+    }
+
 
 
     fetchAllStudents()
     searchForStudent()
+    newStudentDetails()
 
 
 

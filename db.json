@@ -24,6 +24,11 @@
       "id": 5,
       "name": "Samuel",
       "class": "Piano"
+    },
+    {
+      "id": 6,
+      "name": "Alice Molly",
+      "class": "Drums"
     }
   ],
   "attendance": [
