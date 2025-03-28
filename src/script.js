@@ -12,13 +12,20 @@ document.addEventListener("DOMContentLoaded", function(){
     let tableBody =document.querySelector("#studentTable tbody")
 
 
-    //create html elements
-    let row = document.createElement("tr")
-    let idCell = document.createElement("td")
-    let nameCell = document.createElement("td")
-    let classCell = document.createElement("td")
 
+    
+    
 
+    function fetchAllStudents(){
+
+        fetch('http://localhost:3000/students')
+        .then((resp) => resp.json())
+        .then((students) => {
+            displayStudents(students)
+        })
+
+        .catch((error) => console.error("Error fetching students:", error));
+    }
     
 
 
@@ -53,22 +60,25 @@ document.addEventListener("DOMContentLoaded", function(){
                 //loop through student data
                 students.forEach(student => {
 
-                    
+                    let row = document.createElement("tr")
 
-                    //append id cell
+                    //create and append id cell
+                    let idCell = document.createElement("td")
                     idCell.textContent = student.id
                     row.appendChild(idCell)
 
-                    //append name cell
+                    //create and append name cell
+                    let nameCell = document.createElement("td")
                     nameCell.textContent = student.name
                     row.appendChild(nameCell)
 
-                     //append class cell
+                     //create and append class cell
+                     let classCell = document.createElement("td")
                      classCell.textContent = student.class
                      row.appendChild(classCell)
  
 
-                    //append row to the tbody
+                    //create and append row to the tbody
                     tableBody.appendChild(row)
 
                    
@@ -87,29 +97,35 @@ document.addEventListener("DOMContentLoaded", function(){
         
     }
 
-    function displayStudents(){
+    //function to display all students in the table
+    function displayStudents(students){
 
         //Clears the previous data
         tableBody.innerHTML = ''
 
-        if(student.length === 0){
+        if(students.length === 0){
             tableBody.innerHTML = `<tr><td colspan="3">No student found</td></tr>`
             return
         }
 
-        
+    
 
         students.forEach(student => {
 
-            //append id cell
+            let row = document.createElement("tr")
+
+            //create and append id cell
+            let idCell = document.createElement("td")
             idCell.textContent = student.id
             row.appendChild(idCell)
 
-            //append namecell
+            //create and append namecell
+            let nameCell = document.createElement("td")
             nameCell.textContent = student.name
             row.appendChild(nameCell)
 
-            //append class cell
+            //create and append class cell
+            let classCell = document.createElement("td")
             classCell.textContent = student.class
             row.appendChild(classCell)
 
@@ -124,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 
-
+    fetchAllStudents()
     searchForStudent()
 
 
