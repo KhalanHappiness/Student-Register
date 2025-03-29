@@ -45,8 +45,8 @@ grid-template-areas:
 
     padding: 10px;
     background: white;
-    width: 180px;
-    height: 155px;
+    width: auto;
+    height: auto;
     /* border: 2px solid; */
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -68,8 +68,13 @@ th, td {
     padding: 10px;
     background: white;
     border-radius: 5px;
+    text-align: center;
 
 
+}
+label{
+    margin: 10px;
+    padding: 10px;
 }
 
 
@@ -127,4 +132,43 @@ form .btn{
 button:disabled {
     cursor: not-allowed;
     opacity: 0.6;
+}
+
+@media  screen and (max-width: 780px){
+    #container {
+        display: grid;
+        grid-template-areas:
+            "heading"
+            "searchDiv"
+            "registerDiv"
+            "totals"
+            "results";
+        gap: 10px;
+        padding: 20px;
+        margin: 20px auto;
+    }
+
+    #totals {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        background: #ECECEC;
+        
+     
+    }
+
+     form .input-field .btn {
+        width: 100%;
+        max-width: none;
+        
+    }
+
+    table .absent-btn .btn{
+
+        width: 100%;
+        max-width: none;
+    }
+
+    
+
 }

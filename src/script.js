@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function(){
         let statusCell = document.createElement("td")
         //create the present button
         let presentButton = document.createElement("button");
-        presentButton.textContent="present"
+        presentButton.textContent="Present"
         presentButton.classList.add("btn")
         presentButton.addEventListener("click", function(){
             markAttendance(student.id, "Present", presentButton, absentButton)
