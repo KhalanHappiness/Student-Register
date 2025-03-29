@@ -1,7 +1,7 @@
 ### Student Register
 
 
-This is a simple web based student register that allows users to register students, search for students and mark attendance. The systen interacts wuth a backend server to manage student records
+This is a simple web based student register that allows users to register students, search for students and mark attendance. The system interacts with a backend server to manage student records
 
 ### Features
 - Fetch and display all students from the database
@@ -19,14 +19,14 @@ This is a simple web based student register that allows users to register studen
 - The function fetchAllStudents() retrieves the list of students from the backend and displays them in an HTML table
 
 2. Search for a student
-- Users can search for a student by entering their ID. The function searchForStudent() makkes a GET requestf to http://localhost:3000/students/?id={searchValue} and updates the table with the result.
+- Users can search for a student by entering their ID. The function searchForStudent() makes a GET request and updates the table with the result.
 
 3. Adding a new Student
 
 - The function newStudentDetails() allows users to register a new student by submitting a form. A unique student ID is generated dynamically using the generateNextStudentId(). The new student is then stored in the backend database
 
 4. Marking attendance 
--Each student row hs "Present" and "Absent" buttons. Clicking a button sends a POST request to http://localhost:3000/attendance recording the attendance status and disabling both buttons to prevent multiple submissions
+-Each student row has "Present" and "Absent" buttons. Clicking a button sends a POST request recording the attendance status and disabling both buttons to prevent multiple submissions
 
 5. Updating student totals
 - The funciton updateStudentTotals() fetches student and attendance data, calculates the number of present and absent students for the current day, and updates the UI accordingly
