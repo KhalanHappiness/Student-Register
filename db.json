@@ -34,6 +34,11 @@
       "id": "7",
       "name": "Wisdom Blessed",
       "class": "Piano"
+    },
+    {
+      "id": 8,
+      "name": "Joshua Shalom",
+      "class": "Trumpet"
     }
   ],
   "attendance": [
@@ -56,51 +61,6 @@
       "id": "5d9a",
       "status": "Present",
       "date": "2025-03-28"
-    },
-    {
-      "id": "eb80",
-      "status": "Absent",
-      "date": "2025-03-28"
-    },
-    {
-      "id": "9255",
-      "status": "Absent",
-      "date": "2025-03-29"
-    },
-    {
-      "id": "ecb6",
-      "status": "Present",
-      "date": "2025-03-29"
-    },
-    {
-      "id": "784a",
-      "status": "Present",
-      "date": "2025-03-29"
-    },
-    {
-      "id": "d43a",
-      "status": "Absent",
-      "date": "2025-03-29"
-    },
-    {
-      "id": "6349",
-      "status": "Absent",
-      "date": "2025-03-29"
-    },
-    {
-      "id": "08ee",
-      "status": "Present",
-      "date": "2025-03-29"
-    },
-    {
-      "id": "0b12",
-      "status": "Present",
-      "date": "2025-03-29"
-    },
-    {
-      "id": "77f3",
-      "status": "Present",
-      "date": "2025-03-29"
     }
   ]
 }

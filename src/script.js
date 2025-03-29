@@ -222,51 +222,64 @@ document.addEventListener("DOMContentLoaded", function(){
     
             const name = document.getElementById("name").value.trim()
             const className = document.getElementById("className").value.trim()
-    
-            // Fetch existing students to get the next ID
-            fetch('http://localhost:3000/students')
-            .then(response => response.json())
-            .then(existingStudents => {
-                // Generate the next sequential ID
-                const newStudentId = generateNextStudentId(existingStudents)
-    
-                // Prepare student data object
-                const studentData = {
-                    id: newStudentId,
-                    name: name,
-                    class: className
-                }
-    
-                // Post the new student
-                return fetch('http://localhost:3000/students', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(studentData)
+
+            if(name === "" && className === ""){
+
+                alert("name and class cannot be empty")
+            }
+            else if(name === "" || className === ""){
+
+                alert("fill in the required field")
+            }
+
+            else{
+                // Fetch existing students to get the next ID
+                fetch('http://localhost:3000/students')
+                .then(response => response.json())
+                .then(existingStudents => {
+                    // Generate the next sequential ID
+                    const newStudentId = generateNextStudentId(existingStudents)
+
+                    // Prepare student data object
+                    const studentData = {
+                        id: newStudentId,
+                        name: name,
+                        class: className
+                    }
+
+                    // Post the new student
+                    return fetch('http://localhost:3000/students', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(studentData)
+                    })
                 })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok')
-                }
-                return response.json()
-            })
-            .then(data => {
-                // Clear the form
-                document.getElementById("name").value = ''
-                document.getElementById("className").value = ''
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok')
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    // Clear the form
+                    document.getElementById("name").value = ''
+                    document.getElementById("className").value = ''
+
+                    // Optional: Refresh the student list or add the new student to the table
+                    renderStudentRow(data)
+
+                    // Show success message
+                    alert('Student added successfully!')
+                })
+                .catch(error => {
+                    console.error('Error adding student:', error)
+                    alert('Failed to add student. Please try again.')
+                })
+            }
     
-                // Optional: Refresh the student list or add the new student to the table
-                renderStudentRow(data)
-    
-                // Show success message
-                alert('Student added successfully!')
-            })
-            .catch(error => {
-                console.error('Error adding student:', error)
-                alert('Failed to add student. Please try again.')
-            })
+            
         })
     }
 
