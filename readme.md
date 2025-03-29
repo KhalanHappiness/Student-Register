@@ -1,7 +1,7 @@
 ### Student Register
 
 
-This is a simple web pased student register that allows users to register students, search for students and mark attendance. The systen interacts wuth a backend server to manage student records
+This is a simple web based student register that allows users to register students, search for students and mark attendance. The systen interacts wuth a backend server to manage student records
 
 ### Features
 - Fetch and display all students from the database
