@@ -2,6 +2,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
     console.log("The page has been loaded")
 
+    // JSONbin.io Configuration
+    const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/67e6df3b8a456b79667e86bf';
+    const JSONBIN_HEADERS = {
+        'Content-Type': 'application/json',
+        'X-Master-Key': '$2a$10$OY.M2i6CXGFny7V37WLJUO/sTOXqeBUou0orKz7SAKYY8cSeJ2.CS'
+    };
+
     //DOM Element References
 
     
@@ -18,9 +25,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
     function fetchAllStudents(){
 
-        fetch('http://localhost:3000/students')
+        fetch(`${JSONBIN_URL}/latest`, {
+            headers: JSONBIN_HEADERS
+        })
         .then((resp) => resp.json())
-        .then((students) => {
+        .then((data) => {
+
+            //JSONbin returns data in a specific format with record and metadata
+            const students = data.record.students || [];
             displayStudents(students)
         })
 
@@ -39,32 +51,30 @@ document.addEventListener("DOMContentLoaded", function(){
             const search = document.getElementById("search").value.trim()
          
 
-            fetch(`http://localhost:3000/students/?id=${search}`,{
-
-                headers:{
-                    "Content-Type": "application/json",
-
-                }
+            fetch(`${JSONBIN_URL}/latest`, {
+                headers: JSONBIN_HEADERS
             })
 
             .then((resp) => resp.json())
-            .then((students)=> {
+            .then((data)=> {
 
-                //confirm that it is an array
-                if (!Array.isArray(students)) students = [students];
+                const students = data.record.students || [];
+                // Filter students by ID on the client side
+                const filteredStudents = students.filter(student => 
+                    student.id.toString() === search);
 
                 // Clear previous search results
                 tableBody.innerHTML = "";
 
                 // If no student is found
-                if (students.length === 0) {
+                if (filteredStudents.length === 0) {
                     tableBody.innerHTML = `<tr><td colspan="3">No student found</td></tr>`
                     return
                 }
                
 
                 //loop through student data
-                students.forEach(student => {renderStudentRow(student)})
+                filteredStudents.forEach(student => {renderStudentRow(student)})
 
                 
             })
@@ -151,7 +161,26 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
     //function to mark attendance(disable buttons after selection)
-    function markAttendance(student, status, presentBtn, absentbtn){
+    function markAttendance(studentId, status, presentBtn, absentbtn){
+
+        // Get current data first
+        fetch(`${JSONBIN_URL}/latest`, {
+            headers: JSONBIN_HEADERS
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Get existing data
+            let binData = data.record;
+            let students = binData.students || [];
+            let attendance = binData.attendance || [];
+            
+            // Find the student
+            const student = students.find(s => s.id === studentId);
+            
+            if (!student) {
+                throw new Error('Student not found');
+            }
+            
 
         // Prepare attendance data
         const attendanceData = {
@@ -162,22 +191,22 @@ document.addEventListener("DOMContentLoaded", function(){
             date: new Date().toISOString().split('T')[0] // Current date in YYYY-MM-DD format
         }
 
-        // Post attendance to the database
-        fetch('http://localhost:3000/attendance', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(attendanceData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok')
-            }
-            return response.json()
-        })
+        // Add to attendance array
+        attendance.push(attendanceData)
+        binData.attendance = attendance
+
+        // Update the bin with new data
+        return fetch(JSONBIN_URL, {
+            method: 'PUT',
+            headers: JSONBIN_HEADERS,
+            body: JSON.stringify(binData)
+        });
+    })
+
+        .then(response => response.json())
+            
         .then(data => {
-            console.log('Attendance recorded successfully:', data)
+            alert('Attendance recorded successfully:', data)
 
             //Disable both buttons after successful posting
             presentBtn.disabled = true
@@ -233,45 +262,58 @@ document.addEventListener("DOMContentLoaded", function(){
             }
 
             else{
-                // Fetch existing students to get the next ID
-                fetch('http://localhost:3000/students')
+                
+                // First get the current data
+                fetch(`${JSONBIN_URL}/latest`, {
+                    headers: JSONBIN_HEADERS
+                })
                 .then(response => response.json())
-                .then(existingStudents => {
-                    // Generate the next sequential ID
-                    const newStudentId = generateNextStudentId(existingStudents)
+                .then(data => {
 
-                    // Prepare student data object
-                    const studentData = {
+                    // Get existing data
+                    let binData = data.record;
+                    let students = binData.students || [];
+
+                    // Generate the next sequential ID
+                    const newStudentId = generateNextStudentId(students);
+
+                    // Create a new student
+                    const newStudent = {
                         id: newStudentId,
                         name: name,
                         class: className
                     }
 
+                    //add student to array
+                    students.push(newStudent);
+                    binData.students = students;
+
                     // Post the new student
-                    return fetch('http://localhost:3000/students', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(studentData)
+                    // Update the bin with new data
+                    return fetch(JSONBIN_URL, {
+                        method: 'PUT',
+                        headers: JSONBIN_HEADERS,
+                        body: JSON.stringify(binData)
                     })
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok')
-                    }
-                    return response.json()
-                })
+                .then(response => response.json())
                 .then(data => {
                     // Clear the form
                     document.getElementById("name").value = ''
                     document.getElementById("className").value = ''
 
-                    // Optional: Refresh the student list or add the new student to the table
-                    renderStudentRow(data)
+                    // Find the new student in the updated data
+                    const newStudentData = data.record.students;
+                    const newStudent = newStudentData[newStudentData.length - 1];
+
+                    //Render the new student
+                    renderStudentRow(newStudent)
 
                     // Show success message
                     alert('Student added successfully!')
+
+                    // Refresh the student list
+                    fetchAllStudents();
                 })
                 .catch(error => {
                     console.error('Error adding student:', error)
@@ -285,11 +327,16 @@ document.addEventListener("DOMContentLoaded", function(){
 
     function updateStudentTotals() {
         // Fetch students and attendance data
-        Promise.all([
-            fetch('http://localhost:3000/students').then(response => response.json()),
-            fetch('http://localhost:3000/attendance').then(response => response.json())
-        ])
-        .then(([students, attendanceRecords]) => {
+        fetch(`${JSONBIN_URL}/latest`, {
+            headers: JSONBIN_HEADERS
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            const binData = data.record;
+            const students = binData.students || [];
+            const attendanceRecords = binData.attendance || [];
+
             // Total number of students
             const totalStudents = students.length
     

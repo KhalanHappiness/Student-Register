@@ -46,7 +46,7 @@ GET /attendance → Fetch attendance record
 
 ### Future enhancements 
 - Date selection for viewing past attendance records
-- implement a more dynamic uni with real time updates
+- implement a more dynamic UI with real time updates
 - improve on the mark attendance functionality
 - Bulk attendance marking
 - add more filtering and sorting options
