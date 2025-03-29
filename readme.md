@@ -29,7 +29,7 @@ This is a simple web based student register that allows users to register studen
 -Each student row has "Present" and "Absent" buttons. Clicking a button sends a POST request recording the attendance status and disabling both buttons to prevent multiple submissions
 
 5. Updating student totals
-- The funciton updateStudentTotals() fetches student and attendance data, calculates the number of present and absent students for the current day, and updates the UI accordingly
+- The function updateStudentTotals() fetches student and attendance data, calculates the number of present and absent students for the current day, and updates the UI accordingly
 
 
 ### API Endpoints
