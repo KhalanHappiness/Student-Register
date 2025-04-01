@@ -151,6 +151,17 @@ document.addEventListener("DOMContentLoaded", function(){
        
         row.appendChild(statusCell)
 
+        // Create and append the delete cell
+        let deleteCell = document.createElement("td");
+        let deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.classList.add("delete-btn"); // Add a class for styling
+        deleteButton.addEventListener("click", function() {
+            deleteStudent(student.id);
+        });
+        deleteCell.appendChild(deleteButton);
+        row.appendChild(deleteCell);
+
 
         tableBody.appendChild(row)
 
@@ -379,6 +390,56 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         })
     }
+
+    // Function to delete a student
+function deleteStudent(studentId) {
+    // Confirm deletion
+    if (!confirm("Are you sure you want to delete this student?")) {
+        return;
+    }
+    
+    // Get current data
+    fetch(`${JSONBIN_URL}/latest`, {
+        headers: JSONBIN_HEADERS
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Get existing data
+        let binData = data.record;
+        let students = binData.students || [];
+        
+        // Filter out the student to delete
+        binData.students = students.filter(student => student.id !== studentId);
+        
+        // Also remove any attendance records for this student
+        if (binData.attendance) {
+            binData.attendance = binData.attendance.filter(record => 
+                record.studentId !== studentId
+            );
+        }
+        
+        // Update the bin with new data
+        return fetch(JSONBIN_URL, {
+            method: 'PUT',
+            headers: JSONBIN_HEADERS,
+            body: JSON.stringify(binData)
+        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Student deleted successfully');
+        
+        // Refresh the student list
+        fetchAllStudents();
+        
+        // Update totals after successful deletion
+        updateStudentTotals();
+    })
+    .catch(error => {
+        console.error('Error deleting student:', error);
+        alert('Failed to delete student. Please try again.');
+    });
+}
 
 
 
